@@ -34,7 +34,7 @@ class VehicleService
         return $vehicle;
     }
 
-    public function registerVehicle(string $fleetId, string $licensePlate): void
+    public function registerVehicle(string $fleetId, string $licensePlate): Vehicle
     {
         $fleet = $this->fleetRepository->findById($fleetId);
         if (!$fleet) {
@@ -53,6 +53,8 @@ class VehicleService
 
         $fleet->addVehicle($vehicle);
         $this->fleetRepository->save($fleet);
+
+        return $vehicle;
     }
 
     public function parkVehicle(string $fleetId, string $licensePlate, float $lat, float $lng): Location

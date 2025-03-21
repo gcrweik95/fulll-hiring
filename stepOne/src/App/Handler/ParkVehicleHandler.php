@@ -2,14 +2,14 @@
 
 namespace Fulll\App\Handler;
 
-use Fulll\App\Command\RegisterVehicleCommand;
-use Fulll\Domain\Model\Vehicle;
+use Fulll\App\Command\ParkVehicleCommand;
+use Fulll\Domain\Model\Location;
 use Fulll\Domain\Service\VehicleService;
 use Fulll\Infra\Persistence\InMemoryFleetRepository;
 use Fulll\Infra\Persistence\InMemoryLocationRepository;
 use Fulll\Infra\Persistence\InMemoryVehicleRepository;
 
-class RegisterVehicleHandler
+class ParkVehicleHandler
 {
     private VehicleService $vehicleService;
 
@@ -26,9 +26,9 @@ class RegisterVehicleHandler
         $this->vehicleService = new VehicleService($this->fleetRepository, $this->vehicleRepository, $this->locationRepository);
     }
 
-    public function handle(RegisterVehicleCommand $command): Vehicle
+    public function handle(ParkVehicleCommand $command): Location
     {
-        $vehicle = $this->vehicleService->registerVehicle($command->getFleetId(), $command->getVehicleLicensePlate());
-        return $vehicle;
+        $location = $this->vehicleService->parkVehicle($command->getFleetId(), $command->getVehicleLicensePlate(), $command->getLat(), $command->getLng());
+        return $location;
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Fulll\App\Command;
 
-class FleetRegisterVehicleCommand
+class RegisterVehicleCommand
 {
     private string $fleetId;
     private string $vehicleLicensePlate;
