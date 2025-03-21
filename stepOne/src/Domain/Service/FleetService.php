@@ -28,7 +28,6 @@ class FleetService
     public function fleetHasVehicle(Fleet $aFleet, Vehicle $aVehicle): bool
     {
         return $this->fleetRepository->findByFleetAndVehicle($aFleet, $aVehicle);
-        return true;
     }
 
     public function reset(): void

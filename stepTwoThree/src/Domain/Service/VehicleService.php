@@ -73,10 +73,4 @@ class VehicleService
         $this->locationRepository->save($location);
         return $location;
     }
-
-    public function reset(): void
-    {
-        $this->vehicleRepository->reset();
-        $this->locationRepository->reset();
-    }
 }

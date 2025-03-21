@@ -27,9 +27,4 @@ class FleetService
         return $this->fleetRepository->findByFleetAndVehicle($aFleet, $aVehicle);
         return true;
     }
-
-    public function reset(): void
-    {
-        $this->fleetRepository->reset();
-    }
 }
