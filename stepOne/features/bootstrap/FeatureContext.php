@@ -45,6 +45,7 @@ class FeatureContext implements Context
     public function reset(): void
     {
         $this->fleetService->reset();
+        $this->vehicleService->reset();
     }
 
     #[Given('my fleet')]
