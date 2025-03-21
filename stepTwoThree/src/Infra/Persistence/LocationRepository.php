@@ -1,20 +1,30 @@
 <?php
 
-namespace App\Repository;
+namespace App\Infra\Persistence;
 
-use App\Entity\Location;
+use App\Domain\Model\Location;
+use App\Domain\Model\Vehicle;
+use App\Domain\Repository\LocationRepositoryInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @extends ServiceEntityRepository<Location>
  */
-class LocationRepository extends ServiceEntityRepository
+class LocationRepository extends ServiceEntityRepository implements LocationRepositoryInterface
 {
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Location::class);
     }
+    // TODO: TBC
+
+    public function findByLatLngVehicle(float $lat, float $lng, Vehicle $vehicle): ?Location
+    {
+        return new Location;
+    }
+
+    public function save(Location $location): void {}
 
     //    /**
     //     * @return Location[] Returns an array of Location objects

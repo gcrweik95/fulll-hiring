@@ -2,9 +2,7 @@
 
 namespace App\Domain\Model;
 
-use App\Repository\VehicleRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use App\Infra\Persistence\VehicleRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: VehicleRepository::class)]
@@ -18,16 +16,11 @@ class Vehicle
     #[ORM\Column(length: 255)]
     private ?string $licensePlate = null;
 
-    /**
-     * @var Collection<int, Fleet>
-     */
-    #[ORM\ManyToMany(targetEntity: Fleet::class, inversedBy: 'vehicles')]
-    private Collection $fleets;
+    #[ORM\OneToOne(inversedBy: 'vehicle', cascade: ['persist', 'remove'])]
+    private ?Location $location = null;
 
-    public function __construct()
-    {
-        $this->fleets = new ArrayCollection();
-    }
+    #[ORM\ManyToOne(inversedBy: 'vehicles')]
+    private ?Fleet $fleet = null;
 
     public function getId(): ?int
     {
@@ -46,26 +39,26 @@ class Vehicle
         return $this;
     }
 
-    /**
-     * @return Collection<int, Fleet>
-     */
-    public function getFleets(): Collection
+    public function getLocation(): ?Location
     {
-        return $this->fleets;
+        return $this->location;
     }
 
-    public function addFleet(Fleet $fleet): static
+    public function setLocation(?Location $location): static
     {
-        if (!$this->fleets->contains($fleet)) {
-            $this->fleets->add($fleet);
-        }
+        $this->location = $location;
 
         return $this;
     }
 
-    public function removeFleet(Fleet $fleet): static
+    public function getFleet(): ?Fleet
     {
-        $this->fleets->removeElement($fleet);
+        return $this->fleet;
+    }
+
+    public function setFleet(?Fleet $fleet): static
+    {
+        $this->fleet = $fleet;
 
         return $this;
     }

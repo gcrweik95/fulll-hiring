@@ -2,7 +2,7 @@
 
 namespace App\Domain\Model;
 
-use App\Repository\FleetRepository;
+use App\Infra\Persistence\FleetRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -21,13 +21,14 @@ class Fleet
     /**
      * @var Collection<int, Vehicle>
      */
-    #[ORM\ManyToMany(targetEntity: Vehicle::class, mappedBy: 'fleets')]
+    #[ORM\OneToMany(targetEntity: Vehicle::class, mappedBy: 'fleet')]
     private Collection $vehicles;
 
     public function __construct()
     {
         $this->vehicles = new ArrayCollection();
     }
+
 
     public function getId(): ?int
     {
@@ -58,7 +59,7 @@ class Fleet
     {
         if (!$this->vehicles->contains($vehicle)) {
             $this->vehicles->add($vehicle);
-            $vehicle->addFleet($this);
+            $vehicle->setFleet($this);
         }
 
         return $this;
@@ -67,7 +68,10 @@ class Fleet
     public function removeVehicle(Vehicle $vehicle): static
     {
         if ($this->vehicles->removeElement($vehicle)) {
-            $vehicle->removeFleet($this);
+            // set the owning side to null (unless already changed)
+            if ($vehicle->getFleet() === $this) {
+                $vehicle->setFleet(null);
+            }
         }
 
         return $this;

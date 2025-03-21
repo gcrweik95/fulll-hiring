@@ -1,4 +1,4 @@
-FROM php:8.1.6-fpm-alpine
+FROM php:8.2-fpm-alpine
 
 COPY xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini.disabled
 

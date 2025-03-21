@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Entity;
+namespace App\Domain\Model;
 
-use App\Repository\LocationRepository;
+use App\Infra\Persistence\LocationRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: LocationRepository::class)]
@@ -71,5 +71,10 @@ class Location
         $this->vehicle = $vehicle;
 
         return $this;
+    }
+
+    public function equals(Location $location): bool
+    {
+        return $this->lat === $location->getLat() && $this->lng === $location->getLng();
     }
 }

@@ -35,12 +35,12 @@
   },
   "autoload": {
     "psr-4": {
-      "Fulll\\": "src/"
+      "App\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "Fulll\\Tests\\": "tests/"
+      "App\\Tests\\": "tests/"
     }
   },
   "replace": {

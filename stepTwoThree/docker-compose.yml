@@ -34,12 +34,9 @@ services:
             - './docker/apache/logs/:/var/log/apache2'
         container_name: ${CONTAINER_NAME}_apache
     mysql:
-        image: mariadb:10.7.3-focal
+        image: mariadb:10.4.22
         ports:
-            - '${MYSQL_PORT}:3306'
-        volumes:
-            - ./docker/mysql/init:/docker-entrypoint-initdb.d
-            - ./fixtures:/fixtures
+        - '${MYSQL_PORT}:3306'
         environment:
             MYSQL_ROOT_PASSWORD: root
         container_name: ${CONTAINER_NAME}_mysql

@@ -1,20 +1,28 @@
 <?php
 
-namespace App\Repository;
+namespace App\Infra\Persistence;
 
-use App\Entity\Fleet;
+use App\Domain\Model\Fleet;
+use App\Domain\Repository\FleetRepositoryInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @extends ServiceEntityRepository<Fleet>
  */
-class FleetRepository extends ServiceEntityRepository
+class FleetRepository extends ServiceEntityRepository implements FleetRepositoryInterface
 {
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Fleet::class);
     }
+    // TODO: TBC
+    public function findById(string $id): ?Fleet
+    {
+        return new Fleet();
+    }
+
+    public function save(Fleet $fleet): void {}
 
     //    /**
     //     * @return Fleet[] Returns an array of Fleet objects
