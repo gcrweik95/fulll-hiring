@@ -2,7 +2,6 @@
 
 namespace Fulll\Domain\Repository;
 
-use Fulll\Domain\Model\Vehicle;
 use Fulll\Domain\Model\Fleet;
 
 interface FleetRepositoryInterface
