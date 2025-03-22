@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Domain\Model;
 
 use App\Infra\Persistence\FleetRepository;
@@ -29,25 +31,24 @@ class Fleet
         $this->vehicles = new ArrayCollection();
     }
 
-
-    public function getId(): ?int
+    public function getId() : ?int
     {
         return $this->id;
     }
 
-    public function getFleetId(): ?string
+    public function getFleetId() : ?string
     {
         return $this->fleetId;
     }
 
-    public function setFleetId(string $fleetId): static
+    public function setFleetId(string $fleetId) : static
     {
         $this->fleetId = $fleetId;
 
         return $this;
     }
 
-    public function hasVehicle(Vehicle $vehicle): bool
+    public function hasVehicle(Vehicle $vehicle) : bool
     {
         return $this->vehicles->contains($vehicle);
     }
@@ -55,12 +56,12 @@ class Fleet
     /**
      * @return Collection<int, Vehicle>
      */
-    public function getVehicles(): Collection
+    public function getVehicles() : Collection
     {
         return $this->vehicles;
     }
 
-    public function addVehicle(Vehicle $vehicle): static
+    public function addVehicle(Vehicle $vehicle) : static
     {
         if (!$this->vehicles->contains($vehicle)) {
             $this->vehicles->add($vehicle);
@@ -70,7 +71,7 @@ class Fleet
         return $this;
     }
 
-    public function removeVehicle(Vehicle $vehicle): static
+    public function removeVehicle(Vehicle $vehicle) : static
     {
         if ($this->vehicles->removeElement($vehicle)) {
             // set the owning side to null (unless already changed)

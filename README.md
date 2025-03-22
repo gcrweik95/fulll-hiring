@@ -60,7 +60,7 @@ php bin/console do:mi:mi
 
 #### **5️⃣ Run Behat**
 ```bash
-php vendor/behat/behat/bin/behat
+vendor/behat/behat/bin/behat
 ```
 
 #### **6️⃣ Run PHPStan Analysis**
@@ -69,6 +69,7 @@ vendor/bin/phpstan analyse
 ```
 
 _And you're ready to go!_
+
 
 ### Console Commands
 
@@ -89,3 +90,15 @@ php bin/console fleet:register-vehicle "First Fleet" "ABC123"
 ```bash
 php bin/console fleet:localize-vehicle "First Fleet" "ABC123" 43.2 5.4
 ```
+
+### Code Quality Tools
+
+#### **PHPStan - Level 10**: 
+
+Strictest static analysis level; detects potential bugs, type mismatches, and ensures robust code quality by enforcing strict type checks and best practices.
+
+#### **PHPCS Fixer**: 
+
+Ensures consistent Symfony-based coding standards, strict types, modern short-array syntax, removes unused imports, aligns and orders PHPDocs and imports, and enforces strict comparisons and parameter types—resulting in cleaner, maintainable, and readable code.
+
+### CI/CD Setup/Process (TBC)

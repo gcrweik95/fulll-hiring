@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Domain\Model;
 
 use App\Infra\Persistence\VehicleRepository;
@@ -22,41 +24,41 @@ class Vehicle
     #[ORM\ManyToOne(inversedBy: 'vehicles')]
     private ?Fleet $fleet = null;
 
-    public function getId(): ?int
+    public function getId() : ?int
     {
         return $this->id;
     }
 
-    public function getLicensePlate(): ?string
+    public function getLicensePlate() : ?string
     {
         return $this->licensePlate;
     }
 
-    public function setLicensePlate(string $licensePlate): static
+    public function setLicensePlate(string $licensePlate) : static
     {
         $this->licensePlate = $licensePlate;
 
         return $this;
     }
 
-    public function getLocation(): ?Location
+    public function getLocation() : ?Location
     {
         return $this->location;
     }
 
-    public function setLocation(?Location $location): static
+    public function setLocation(?Location $location) : static
     {
         $this->location = $location;
 
         return $this;
     }
 
-    public function getFleet(): ?Fleet
+    public function getFleet() : ?Fleet
     {
         return $this->fleet;
     }
 
-    public function setFleet(?Fleet $fleet): static
+    public function setFleet(?Fleet $fleet) : static
     {
         $this->fleet = $fleet;
 

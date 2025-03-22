@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Infra\Persistence;
 
 use App\Domain\Model\Vehicle;
@@ -17,13 +19,15 @@ class VehicleRepository extends ServiceEntityRepository implements VehicleReposi
         parent::__construct($registry, Vehicle::class);
     }
 
-    public function findByLicensePlate(string $licensePlate): ?Vehicle
+    public function findByLicensePlate(string $licensePlate) : ?Vehicle
     {
+        /** @var Vehicle|null $vehicle */
         $vehicle = $this->findOneBy(['licensePlate' => $licensePlate]);
+
         return $vehicle;
     }
 
-    public function save(Vehicle $vehicle): void
+    public function save(Vehicle $vehicle) : void
     {
         $this->getEntityManager()->persist($vehicle);
         $this->getEntityManager()->flush();

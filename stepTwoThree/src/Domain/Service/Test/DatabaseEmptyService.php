@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Domain\Service\Test;
 
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\DBAL\Connection;
+use Doctrine\ORM\EntityManagerInterface;
 
 class DatabaseEmptyService
 {
@@ -16,7 +18,7 @@ class DatabaseEmptyService
         $this->connection = $this->entityManager->getConnection();
     }
 
-    public function emptyDB(): void
+    public function emptyDB() : void
     {
         $this->connection->executeQuery('SET FOREIGN_KEY_CHECKS = 0');
 

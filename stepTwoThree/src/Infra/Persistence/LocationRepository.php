@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Infra\Persistence;
 
 use App\Domain\Model\Location;
@@ -18,7 +20,7 @@ class LocationRepository extends ServiceEntityRepository implements LocationRepo
         parent::__construct($registry, Location::class);
     }
 
-    public function findByLatLngVehicle(float $lat, float $lng, Vehicle $vehicle): ?Location
+    public function findByLatLngVehicle(float $lat, float $lng, Vehicle $vehicle) : ?Location
     {
         $query = $this->createQueryBuilder('l')
             ->andWhere('l.lat = :lat')
@@ -29,12 +31,13 @@ class LocationRepository extends ServiceEntityRepository implements LocationRepo
             ->andWhere('v.id = :id')
             ->setParameter('id', $vehicle->getId())
             ->getQuery();
+        /** @var Location|null $location */
         $location = $query->getOneOrNullResult();
-        var_dump($location);
+
         return $location;
     }
 
-    public function save(Location $location): void
+    public function save(Location $location) : void
     {
         $this->getEntityManager()->persist($location);
         $this->getEntityManager()->flush();

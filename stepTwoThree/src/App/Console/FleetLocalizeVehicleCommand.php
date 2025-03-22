@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\App\Console;
 
 use App\App\Command\ParkVehicleCommand;
@@ -8,7 +10,6 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -23,7 +24,7 @@ class FleetLocalizeVehicleCommand extends Command
         parent::__construct();
     }
 
-    protected function configure(): void
+    protected function configure() : void
     {
         $this
             ->setName('fleet:localize-vehicle')
@@ -35,13 +36,26 @@ class FleetLocalizeVehicleCommand extends Command
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): int
+    protected function execute(InputInterface $input, OutputInterface $output) : int
     {
         $io = new SymfonyStyle($input, $output);
-        $vehiclePlateNumber = $input->getArgument('vehiclePlateNumber');
         $fleetId = $input->getArgument('fleetId');
+        $vehiclePlateNumber = $input->getArgument('vehiclePlateNumber');
         $lat = $input->getArgument('lat');
         $lng = $input->getArgument('lng');
+
+        if (!is_string($fleetId)) {
+            throw new \InvalidArgumentException('fleetId must be a string.');
+        }
+        if (!is_string($vehiclePlateNumber)) {
+            throw new \InvalidArgumentException('vehiclePlateNumber must be a string.');
+        }
+        if (!is_float($lat)) {
+            throw new \InvalidArgumentException('lat must be numeric.');
+        }
+        if (!is_float($lng)) {
+            throw new \InvalidArgumentException('lng must be numeric.');
+        }
 
         $io->note(sprintf(
             'Registering a vehicle with plate number "%s" in a fleet with an ID "%s" in a location with the following coordinates (Latitude: %01.2f, Longitude: %01.2f)',
@@ -56,9 +70,11 @@ class FleetLocalizeVehicleCommand extends Command
             $this->handler->handle($command);
 
             $io->success('Your vehicle has been localized in the identified fleet and location!');
+
             return Command::SUCCESS;
         } catch (\Exception $e) {
             $io->error($e->getMessage());
+
             return Command::FAILURE;
         }
     }

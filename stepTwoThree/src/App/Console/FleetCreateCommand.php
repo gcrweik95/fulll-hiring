@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\App\Console;
 
 use App\App\Command\CreateFleetCommand;
@@ -22,7 +24,7 @@ class FleetCreateCommand extends Command
         parent::__construct();
     }
 
-    protected function configure(): void
+    protected function configure() : void
     {
         $this
             ->setName('fleet:create')
@@ -31,10 +33,15 @@ class FleetCreateCommand extends Command
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): int
+    protected function execute(InputInterface $input, OutputInterface $output) : int
     {
         $io = new SymfonyStyle($input, $output);
         $fleetId = $input->getArgument('fleetId');
+
+        if (!is_string($fleetId)) {
+            throw new \InvalidArgumentException('fleetId must be a string.');
+        }
+
         $io->note(sprintf('Creating fleet with ID "%s"', $fleetId));
 
         try {
@@ -42,9 +49,11 @@ class FleetCreateCommand extends Command
             $this->handler->handle($command);
 
             $io->success('Your new fleet has been created!');
+
             return Command::SUCCESS;
         } catch (\Exception $e) {
             $io->error($e->getMessage());
+
             return Command::FAILURE;
         }
     }

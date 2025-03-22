@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Domain\Service;
 
 use App\Domain\Exception\FleetAlreadyExistsException;
@@ -10,10 +12,11 @@ use App\Infra\Persistence\FleetRepository;
 class FleetService
 {
     public function __construct(
-        private readonly FleetRepository $fleetRepository
-    ) {}
+        private readonly FleetRepository $fleetRepository,
+    ) {
+    }
 
-    public function create(string $fleetId): Fleet
+    public function create(string $fleetId) : Fleet
     {
         $fleet = $this->fleetRepository->findById($fleetId);
         if ($fleet) {
@@ -24,10 +27,11 @@ class FleetService
         $fleet->setFleetId($fleetId);
 
         $this->fleetRepository->save($fleet);
+
         return $fleet;
     }
 
-    public function fleetHasVehicle(Fleet $aFleet, Vehicle $aVehicle): bool
+    public function fleetHasVehicle(Fleet $aFleet, Vehicle $aVehicle) : bool
     {
         return $aFleet->hasVehicle($aVehicle);
     }
