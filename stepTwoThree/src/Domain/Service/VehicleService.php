@@ -23,7 +23,8 @@ class VehicleService
     {
         $vehicle = $this->vehicleRepository->findByLicensePlate($licensePlate);
         if (!$vehicle) {
-            $vehicle = new Vehicle($licensePlate);
+            $vehicle = new Vehicle();
+            $vehicle->setLicensePlate($licensePlate);
             $this->vehicleRepository->save($vehicle);
         }
         return $vehicle;

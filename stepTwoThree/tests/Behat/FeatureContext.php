@@ -1,5 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
+namespace App\Tests\Behat;
+
 use App\Domain\Exception\VehicleAlreadyParkedAtLocationException;
 use App\Domain\Exception\VehicleAlreadyRegisteredException;
 use App\Domain\Exception\VehicleNotFoundInFleetException;
@@ -8,6 +12,7 @@ use App\Domain\Model\Vehicle;
 use App\Domain\Service\FleetService;
 use App\Domain\Service\VehicleService;
 use App\Domain\Model\Location;
+use App\Domain\Service\Test\DatabaseEmptyService;
 use Behat\Behat\Context\Context;
 use Behat\Hook\BeforeScenario;
 use Behat\Step\Given;
@@ -26,13 +31,14 @@ class FeatureContext implements Context
 
     public function __construct(
         private readonly FleetService $fleetService,
-        private readonly VehicleService $vehicleService
+        private readonly VehicleService $vehicleService,
+        private readonly DatabaseEmptyService $databaseEmptyService
     ) {}
 
     #[BeforeScenario]
     public function reset(): void
     {
-        // Add db reset service
+        $this->databaseEmptyService->emptyDB();
     }
 
     #[Given('my fleet')]
@@ -53,7 +59,7 @@ class FeatureContext implements Context
     public function iRegisterThisVehicleIntoMyFleet(): void
     {
         try {
-            $this->vehicleService->registerVehicle($this->fleet->getId(), $this->vehicle->getLicensePlate());
+            $this->vehicleService->registerVehicle($this->fleet->getFleetId(), $this->vehicle->getLicensePlate());
         } catch (\Exception $e) {
             $this->exception = $e;
         }
@@ -84,13 +90,13 @@ class FeatureContext implements Context
     #[Given('this vehicle has been registered into the other user\'s fleet')]
     public function thisVehicleHasBeenRegisteredIntoTheOtherUsersFleet(): void
     {
-        $this->vehicleService->registerVehicle($this->otherFleet->getId(), $this->vehicle->getLicensePlate());
+        $this->vehicleService->registerVehicle($this->otherFleet->getFleetId(), $this->vehicle->getLicensePlate());
     }
 
     #[Given('a location')]
     public function aLocation(): void
     {
-        $this->location = $this->vehicleService->parkVehicle($this->fleet->getId(), $this->vehicle->getLicensePlate(), 43.2, 5.4);
+        $this->location = $this->vehicleService->parkVehicle($this->fleet->getFleetId(), $this->vehicle->getLicensePlate(), 43.2, 5.4);
     }
 
     #[When('I park my vehicle at this location')]
@@ -100,12 +106,12 @@ class FeatureContext implements Context
     {
         try {
             $this->vehicleService->parkVehicle(
-                $this->fleet->getId(),
+                $this->fleet->getFleetId(),
                 $this->vehicle->getLicensePlate(),
                 $this->location->getLat(),
                 $this->location->getLng()
             );
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->exception = $e;
         }
     }
@@ -113,7 +119,8 @@ class FeatureContext implements Context
     #[Then('the known location of my vehicle should verify this location')]
     public function theKnownLocationOfMyVehicleShouldVerifyThisLocation(): void
     {
-        Assert::assertTrue($this->location->equals($this->vehicle->getLocation()));
+        $vehicleLocation = $this->vehicle->getLocation();
+        Assert::assertTrue($this->location->equals($vehicleLocation->getLat(), $vehicleLocation->getLng()));
     }
 
 
