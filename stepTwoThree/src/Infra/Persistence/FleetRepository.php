@@ -16,36 +16,20 @@ class FleetRepository extends ServiceEntityRepository implements FleetRepository
     {
         parent::__construct($registry, Fleet::class);
     }
-    // TODO: TBC
+
     public function findById(string $id): ?Fleet
     {
-        return new Fleet();
+        $query = $this->createQueryBuilder('f')
+            ->where('f.fleetId = :fleetId')
+            ->setParameter('fleetId', $id)
+            ->getQuery();
+        $fleet = $query->getOneOrNullResult();
+        return $fleet;
     }
 
-    public function save(Fleet $fleet): void {}
-
-    //    /**
-    //     * @return Fleet[] Returns an array of Fleet objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('f')
-    //            ->andWhere('f.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('f.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findOneBySomeField($value): ?Fleet
-    //    {
-    //        return $this->createQueryBuilder('f')
-    //            ->andWhere('f.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    public function save(Fleet $fleet): void
+    {
+        $this->getEntityManager()->persist($fleet);
+        $this->getEntityManager()->flush();
+    }
 }

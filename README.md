@@ -34,7 +34,7 @@ The result should look like this :
 
 #### **Install**
 
-#### **1️⃣ Go To Directory**
+#### **1️⃣ Go To Project's Directory**
 ```bash
 cd stepTwoTree
 ```
@@ -50,15 +50,42 @@ docker exec -it fulll_test_php-fpm bash
 composer install
 php bin/console c:c
 ```
--- We need to add the steps about the database
-#### **4️⃣ Run Behat**
+
+#### **4️⃣  **
+```bash
+php bin/console do:da:c
+php bin/console do:mi:mi
+```
+
+
+#### **5️⃣ Run Behat**
 ```bash
 php vendor/behat/behat/bin/behat
 ```
 
-#### **5️⃣ Run PHPStan Analysis**
+#### **6️⃣ Run PHPStan Analysis**
 ```bash
 vendor/bin/phpstan analyse
 ```
 
 _And you're ready to go!_
+
+### Console Commands
+
+#### **Creates Fleet**
+
+```bash
+php bin/console fleet:create "First Fleet"
+```
+
+#### **Registers Vehicle in a Fleet**
+
+```bash
+php bin/console fleet:register-vehicle "First Fleet" "ABC123"
+```
+
+#### **Localizes Vehicle in a Fleet & Location**
+
+```bash
+php bin/console fleet:localize-vehicle "First Fleet" "ABC123" 43.2 5.4
+```

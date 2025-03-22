@@ -8,5 +8,5 @@ interface VehicleRepositoryInterface
 {
     public function findByLicensePlate(string $licensePlate): ?Vehicle;
 
-    public function save(Vehicle $fleet): void;
+    public function save(Vehicle $vehicle): void;
 }

@@ -38,11 +38,14 @@ class VehicleService
 
         $vehicle = $this->vehicleRepository->findByLicensePlate($licensePlate);
         if (!$vehicle) {
-            $vehicle = new Vehicle($licensePlate);
+            $vehicle = new Vehicle();
+            $vehicle->setLicensePlate($licensePlate);
+            $vehicle->setFleet($fleet);
+
             $this->vehicleRepository->save($vehicle);
         }
 
-        if ($this->fleetRepository->findByFleetAndVehicle($fleet, $vehicle)) {
+        if ($fleet->hasVehicle($vehicle)) {
             throw new VehicleAlreadyRegisteredException();
         }
 
@@ -61,11 +64,13 @@ class VehicleService
 
         $vehicle = $this->vehicleRepository->findByLicensePlate($licensePlate);
         $vehicleLocation = $vehicle->getLocation();
-        if ($vehicleLocation && $vehicleLocation->equals(new Location($lat, $lng))) {
+        if ($vehicleLocation && $vehicleLocation->equals($lat, $lng)) {
             throw new VehicleAlreadyParkedAtLocationException();
         }
 
-        $location = new Location($lat, $lng);
+        $location = new Location();
+        $location->setLat($lat);
+        $location->setLng($lng);
         $location->setVehicle($vehicle);
         $vehicle->setLocation($location);
 

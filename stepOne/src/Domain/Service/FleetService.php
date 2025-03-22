@@ -2,6 +2,7 @@
 
 namespace Fulll\Domain\Service;
 
+use Fulll\Domain\Exception\FleetAlreadyExistsException;
 use Fulll\Domain\Model\Fleet;
 use Fulll\Domain\Model\Vehicle;
 use Fulll\Infra\Persistence\InMemoryFleetRepository;
@@ -18,10 +19,12 @@ class FleetService
     public function create(string $fleetId): Fleet
     {
         $fleet = $this->fleetRepository->findById($fleetId);
-        if (!$fleet) {
-            $fleet = new Fleet($fleetId);
-            $this->fleetRepository->save($fleet);
+        if ($fleet) {
+            throw new FleetAlreadyExistsException();
         }
+
+        $fleet = new Fleet($fleetId);
+        $this->fleetRepository->save($fleet);
         return $fleet;
     }
 

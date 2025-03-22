@@ -47,6 +47,11 @@ class Fleet
         return $this;
     }
 
+    public function hasVehicle(Vehicle $vehicle): bool
+    {
+        return $this->vehicles->contains($vehicle);
+    }
+
     /**
      * @return Collection<int, Vehicle>
      */

@@ -17,37 +17,26 @@ class LocationRepository extends ServiceEntityRepository implements LocationRepo
     {
         parent::__construct($registry, Location::class);
     }
-    // TODO: TBC
 
     public function findByLatLngVehicle(float $lat, float $lng, Vehicle $vehicle): ?Location
     {
-        return new Location;
+        $query = $this->createQueryBuilder('l')
+            ->andWhere('l.lat = :lat')
+            ->andWhere('l.lng = :lng')
+            ->setParameter('lat', $lat)
+            ->setParameter('lng', $lng)
+            ->innerJoin('l.vehicle', 'v')
+            ->andWhere('v.id = :id')
+            ->setParameter('id', $vehicle->getId())
+            ->getQuery();
+        $location = $query->getOneOrNullResult();
+        var_dump($location);
+        return $location;
     }
 
-    public function save(Location $location): void {}
-
-    //    /**
-    //     * @return Location[] Returns an array of Location objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('l')
-    //            ->andWhere('l.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('l.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findOneBySomeField($value): ?Location
-    //    {
-    //        return $this->createQueryBuilder('l')
-    //            ->andWhere('l.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    public function save(Location $location): void
+    {
+        $this->getEntityManager()->persist($location);
+        $this->getEntityManager()->flush();
+    }
 }

@@ -4,22 +4,12 @@ namespace App\App\Command;
 
 class ParkVehicleCommand
 {
-    private string $fleetId;
-    private string $vehicleLicensePlate;
-    private float $lat;
-    private float $lng;
-
     public function __construct(
-        string $fleetId,
-        string $vehicleLicensePlate,
-        float $lat,
-        float $lng
-    ) {
-        $this->fleetId = $fleetId;
-        $this->vehicleLicensePlate = $vehicleLicensePlate;
-        $this->lng = $lat;
-        $this->lng = $lng;
-    }
+        public readonly string $fleetId,
+        public readonly string $vehicleLicensePlate,
+        public readonly float $lat,
+        public readonly float $lng
+    ) {}
 
     public function getFleetId(): string
     {

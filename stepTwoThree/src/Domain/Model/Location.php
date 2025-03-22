@@ -73,8 +73,8 @@ class Location
         return $this;
     }
 
-    public function equals(Location $location): bool
+    public function equals(float $lat, float $lng): bool
     {
-        return $this->lat === $location->getLat() && $this->lng === $location->getLng();
+        return $this->lat === $lat && $this->lng === $lng;
     }
 }

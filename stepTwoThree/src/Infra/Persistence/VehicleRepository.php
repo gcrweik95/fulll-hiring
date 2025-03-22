@@ -16,37 +16,16 @@ class VehicleRepository extends ServiceEntityRepository implements VehicleReposi
     {
         parent::__construct($registry, Vehicle::class);
     }
-    // TODO: TBC
 
     public function findByLicensePlate(string $licensePlate): ?Vehicle
     {
-        return new Vehicle();
+        $vehicle = $this->findOneBy(['licensePlate' => $licensePlate]);
+        return $vehicle;
     }
 
-    public function save(Vehicle $fleet): void {}
-
-    //    /**
-    //     * @return Vehicle[] Returns an array of Vehicle objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('v')
-    //            ->andWhere('v.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('v.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findOneBySomeField($value): ?Vehicle
-    //    {
-    //        return $this->createQueryBuilder('v')
-    //            ->andWhere('v.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    public function save(Vehicle $vehicle): void
+    {
+        $this->getEntityManager()->persist($vehicle);
+        $this->getEntityManager()->flush();
+    }
 }

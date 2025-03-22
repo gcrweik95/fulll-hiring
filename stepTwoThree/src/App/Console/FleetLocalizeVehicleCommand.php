@@ -1,7 +1,9 @@
 <?php
 
-namespace App\Command;
+namespace App\App\Console;
 
+use App\App\Command\ParkVehicleCommand;
+use App\App\Handler\ParkVehicleHandler;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -12,11 +14,11 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
     name: 'fleet:localize-vehicle',
-    description: 'Add a short description for your command',
+    description: 'Localizes a vehicle',
 )]
 class FleetLocalizeVehicleCommand extends Command
 {
-    public function __construct()
+    public function __construct(private readonly ParkVehicleHandler $handler)
     {
         parent::__construct();
     }
@@ -24,26 +26,40 @@ class FleetLocalizeVehicleCommand extends Command
     protected function configure(): void
     {
         $this
-            ->addArgument('arg1', InputArgument::OPTIONAL, 'Argument description')
-            ->addOption('option1', null, InputOption::VALUE_NONE, 'Option description')
+            ->setName('fleet:localize-vehicle')
+            ->setDescription('Localizes a vehicle')
+            ->addArgument('fleetId', InputArgument::REQUIRED, 'Fleet ID')
+            ->addArgument('vehiclePlateNumber', InputArgument::REQUIRED, 'Vehicle Plate Number')
+            ->addArgument('lat', InputArgument::REQUIRED, 'Location Latitude')
+            ->addArgument('lng', InputArgument::REQUIRED, 'Location Longitude')
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $arg1 = $input->getArgument('arg1');
+        $vehiclePlateNumber = $input->getArgument('vehiclePlateNumber');
+        $fleetId = $input->getArgument('fleetId');
+        $lat = $input->getArgument('lat');
+        $lng = $input->getArgument('lng');
 
-        if ($arg1) {
-            $io->note(sprintf('You passed an argument: %s', $arg1));
+        $io->note(sprintf(
+            'Registering a vehicle with plate number "%s" in a fleet with an ID "%s" in a location with the following coordinates (Latitude: %01.2f, Longitude: %01.2f)',
+            $vehiclePlateNumber,
+            $fleetId,
+            $lat,
+            $lng
+        ));
+
+        try {
+            $command = new ParkVehicleCommand($fleetId, $vehiclePlateNumber, $lat, $lng);
+            $this->handler->handle($command);
+
+            $io->success('Your vehicle has been localized in the identified fleet and location!');
+            return Command::SUCCESS;
+        } catch (\Exception $e) {
+            $io->error($e->getMessage());
+            return Command::FAILURE;
         }
-
-        if ($input->getOption('option1')) {
-            // ...
-        }
-
-        $io->success('You have a new command! Now make it your own! Pass --help to see your options.');
-
-        return Command::SUCCESS;
     }
 }
